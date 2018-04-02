@@ -1,0 +1,17 @@
+.list_element_icon {
+	width: 20px;
+	height: 20px;
+	margin-left: 10px;
+}
+
+.task_description {
+	width: 100%;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+textarea {
+	resize: none;
+	height: 100px;
+}
