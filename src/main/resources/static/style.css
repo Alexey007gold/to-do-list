@@ -1,7 +1,35 @@
-.list_element_icon {
-	width: 20px;
-	height: 20px;
-	margin-left: 10px;
+#main_container {
+	background-color: yellow;
+	margin: 2px auto;
+	max-width: 500px;
+	padding: 5px;
+}
+
+#input_container {
+	display: flex;
+	background-color: green;
+	padding: 2px;
+	margin-bottom: 10px;
+	height: 30px;
+}
+
+#new_task_text {
+	width: 100%;
+	margin-right: 2px;
+}
+
+.list_element {
+	display: flex;
+	border: solid black 1px;
+	background-color: LawnGreen;
+	margin-bottom: 3px;
+	padding: 2px;
+	height: 25px;
+	align-items: center; /* align vertical */
+}
+
+.list_element > input[type=button] {
+	margin-left: 2px;
 }
 
 .task_description {
@@ -11,7 +39,16 @@
 	overflow: hidden;
 }
 
-textarea {
-	resize: none;
-	height: 100px;
+input[type=button] {
+	height: 100%;
+}
+
+.no_elements {
+	display: table;
+	margin: 0 auto;
+}
+
+.list_element_icon {
+	width: 20px;
+	margin-left: 10px;
 }
