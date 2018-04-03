@@ -6,10 +6,24 @@ window.onload = function() {
     init();
 };
 
+
 function init() {
     initListContainerHandler();
     loadTaskList();
-    getById("new_task_text").focus();
+	
+	$('#alert').on('hidden.bs.modal', inputFocus);
+	$('#edit-task-prompt').on('hidden.bs.modal', inputFocus);
+	$('#edit-task-prompt').on('shown.bs.modal', function() {
+		var textArea = $('#edit-task-prompt-text');
+		textArea.scrollTop(textArea[0].scrollHeight);
+		textArea.focus();
+	});
+	
+    inputFocus();
+}
+
+function inputFocus() {
+	$("#new_task_text").focus();
 }
 
 function initListContainerHandler() {
@@ -60,7 +74,11 @@ function initListContainerHandler() {
 //Listeners
 document.onkeypress = function(e) {
     if (e.keyCode === 13) {
-        onAddTaskClick();
+		if ($('#edit-task-prompt').hasClass('show')) {
+			onSaveTaskClick();
+		} else {
+			onAddTaskClick();
+		}
     }
 };
 
@@ -69,7 +87,7 @@ function onAddTaskClick() {
 
     var taskDescription = descriptionField.value.trim();
     descriptionField.value = "";
-    descriptionField.focus();
+    inputFocus();
 
     if (taskDescription.length > 0) {
         var newTask = {};
@@ -80,17 +98,24 @@ function onAddTaskClick() {
 
 function onEditTaskClick(element) {
     var id = parseInt(element.getAttribute("taskId"));
-    var description = prompt("Enter new task description", taskList[id].description);
+	$('#edit-task-prompt').modal();
+	
+	var textArea = $('#edit-task-prompt-text');
+	textArea.val(taskList[id].description);
+	textArea.attr('taskId', id);
+	$('#task-save-button').attr('onclick', onSaveTaskClick);
+}
 
-    if (description.trim().length > 0) {
-        editTask(id, description);
-    }
-
-    getById("new_task_text").focus();
+function onSaveTaskClick() {
+	var description = $("#edit-task-prompt-text").val();
+	if (description.trim().length > 0) {
+		$("#edit-task-prompt").modal("hide");
+		editTask($('#edit-task-prompt-text').attr('taskId'), description);
+	}
 }
 
 function onRemoveTaskClick(element) {
-    getById("new_task_text").focus();
+    inputFocus();
 
     removeTask(parseInt(element.getAttribute("taskId")));
 }
@@ -104,6 +129,11 @@ function onCompletedCheckboxClick(element) {
         checkbox.src = "img/checked.png";
     }
     setTaskCompleted(parseInt(element.getAttribute("taskId")), !checked);
+}
+
+function onTaskDescriptionClick(description) {
+	$('#alert_text').text(description);
+	$('#alert').modal();
 }
 //
 
@@ -183,7 +213,7 @@ function getTemplate(className) {
     return result;
 }
 
-function getById(id, rootElement) {
+function getById(id) {
     return document.getElementById(id);
 }
 

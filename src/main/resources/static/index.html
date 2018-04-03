@@ -1,32 +1,93 @@
+<!doctype html>
 <html>
 	<head>
+		<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+		<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'
+			  integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm'
+			  crossorigin='anonymous'>
 		<link rel='stylesheet' href='style.css'>
-		<script src='script.js'></script>
 	</head>
 
 	<body>
 
-		<div id="main_container">
-			<div id='input_container'>
-				<input id='new_task_text' type='text'/>
-				<input id='add_task_button' type='button' value='Add' onclick='onAddTaskClick()'/>
+		<div id='main_container' class='container bg-warning p-0'>
+			<div class='input-group mb-3 bg-primary p-1'>
+				<input id='new_task_text' class='form-control' type='text'/>
+				<div class='input-group-append'>
+					<input id='add_task_button' class='btn btn-outline-secondary bg-light' type='button' value='Add' onclick='onAddTaskClick()'/>
+				</div>
 			</div>
 
-			<div id='list_container'></div>
+			<div id='list_container' class='list-group p-1'>
+				<span class='list-group-item d-flex justify-content-center bg-danger template no_elements'>LOADING ...</span>
+			</div>
 		</div>
 
+		
+		
+		<!-- modal windows -->
+		<div id='alert' class='modal fade' tabindex='-1' role='dialog' aria-labelledby="title" aria-hidden="true">
+			<div class='modal-dialog' role='document'>
+				<div class='modal-content'>
+					<div class='modal-header'>
+						<h6 class='modal-title' id='modal-title'>Task description</h6>
+						<button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+						  <span aria-hidden='true'>&times;</span>
+						</button>
+					</div>
+					<div class='modal-body'>
+						<p id='alert_text'>Modal body text goes here.</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="edit-task-prompt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Edit task</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<label for="edit-task-prompt-text" class="col-form-label">Description:</label>
+								<textarea class="form-control" id="edit-task-prompt-text"></textarea>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary" id='task-save-button'>Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- -->
+		
+		<script src='https://code.jquery.com/jquery-3.2.1.slim.min.js' integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN' crossorigin='anonymous'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js' integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q' crossorigin='anonymous'></script>
+		<script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js' integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl' crossorigin='anonymous'></script>
+		<script src='script.js'></script>
 	</body>
 
-	<templates style="display:none">
-		<div class="template list_element" taskId="0">
-			<span class="task_description" onclick="alert(this.innerText)">Make coffee</span>
-			<img class="list_element_icon completed_checkbox" src="" onclick="onCompletedCheckboxClick(this.parentElement)">
-			<img class="list_element_icon" src="img/edit.png" onclick="onEditTaskClick(this.parentElement)">
-			<img class="list_element_icon" src="img/trash.png" onclick="onRemoveTaskClick(this.parentElement)">
+	
+	<!-- list element templates -->
+	<templates style='display:none'>
+		<div class='list-group-item d-flex flex-row bg-success template list_element' taskId='0'>
+			<span class='mr-auto task_description' onclick='onTaskDescriptionClick(this.innerText)'>Make coffee</span>
+			<img class='list_element_icon completed_checkbox' src='' onclick='onCompletedCheckboxClick(this.parentElement)'>
+			<img class='list_element_icon' src='img/edit.png' onclick='onEditTaskClick(this.parentElement)'>
+			<img class='list_element_icon' src='img/trash.png' onclick='onRemoveTaskClick(this.parentElement)'>
 		</div>
-
-		<span class="template no_elements">NO TASKS</span>
+		
+		<span class='list-group-item d-flex justify-content-center bg-danger template no_elements'>NO TASKS</span>
 	</templates>
-
 
 </html>
