@@ -103,7 +103,7 @@ function onEditTaskClick(element) {
 	var textArea = $('#edit-task-prompt-text');
 	textArea.val(taskList[id].description);
 	textArea.attr('taskId', id);
-	$('#task-save-button').attr('onclick', onSaveTaskClick);
+	$('#task-save-button').attr('onclick', 'onSaveTaskClick()');
 }
 
 function onSaveTaskClick() {
