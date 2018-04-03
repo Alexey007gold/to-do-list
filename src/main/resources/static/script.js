@@ -1,8 +1,10 @@
+'use strict';
+
 var listContainerHandler;
 var taskList;
 
 
-window.onload = function() {
+window.onload = function () {
     init();
 };
 
@@ -10,27 +12,29 @@ window.onload = function() {
 function init() {
     initListContainerHandler();
     loadTaskList();
-	
-	$('#alert').on('hidden.bs.modal', inputFocus);
-	$('#edit-task-prompt').on('hidden.bs.modal', inputFocus);
-	$('#edit-task-prompt').on('shown.bs.modal', function() {
-		var textArea = $('#edit-task-prompt-text');
-		textArea.scrollTop(textArea[0].scrollHeight);
-		textArea.focus();
-	});
-	
+
+    $('#alert').on('hidden.bs.modal', inputFocus);
+
+    var editTaskModal = $('#edit-task-prompt');
+    editTaskModal.on('hidden.bs.modal', inputFocus);
+    editTaskModal.on('shown.bs.modal', function () {
+        var textArea = $('#edit-task-prompt-text');
+        textArea.scrollTop(textArea[0].scrollHeight);
+        textArea.focus();
+    });
+
     inputFocus();
 }
 
 function inputFocus() {
-	$("#new_task_text").focus();
+    $("#new_task_text").focus();
 }
 
 function initListContainerHandler() {
     listContainerHandler = {};
     listContainerHandler.listContainer = getById("list_container");
 
-    listContainerHandler.repopulate = function(taskList) {
+    listContainerHandler.repopulate = function (taskList) {
         this.listContainer.innerHTML = "";
 
         for (var i = 0; i < taskList.length; i++) {
@@ -44,7 +48,7 @@ function initListContainerHandler() {
         }
     };
 
-    listContainerHandler.addTask = function(id, task) {
+    listContainerHandler.addTask = function (id, task) {
         if (this.listContainer.firstChild !== null && this.listContainer.firstChild.tagName !== "DIV") {
             this.listContainer.innerHTML = "";
         }
@@ -53,7 +57,7 @@ function initListContainerHandler() {
         this.listContainer.append(listElem);
     };
 
-    listContainerHandler.removeTask = function(id) {
+    listContainerHandler.removeTask = function (id) {
         this.listContainer.removeChild(this.listContainer.childNodes[id]);
         while (id < this.listContainer.childNodes.length) {
             this.listContainer.childNodes[id].setAttribute("taskId", id);
@@ -66,21 +70,21 @@ function initListContainerHandler() {
         }
     };
 
-    listContainerHandler.updateTask = function(id) {
+    listContainerHandler.updateTask = function (id) {
         getOneByClass("task_description", this.listContainer.childNodes[id]).innerHTML = taskList[id].description;
     };
 }
 
 //Listeners
-document.onkeypress = function(e) {
+document.onkeypress = function (e) {
     if (e.keyCode === 13) {
-	if ($('#edit-task-prompt').hasClass('show')) {
-	    onSaveTaskClick();
-	} else if($('#alert').hasClass('show')) {
+        if ($('#edit-task-prompt').hasClass('show')) {
+            onSaveTaskClick();
+        } else if ($('#alert').hasClass('show')) {
             $("#alert").modal("hide");
-	} else {
-	    onAddTaskClick();
-	}
+        } else {
+            onAddTaskClick();
+        }
     }
 };
 
@@ -100,20 +104,21 @@ function onAddTaskClick() {
 
 function onEditTaskClick(element) {
     var id = parseInt(element.getAttribute("taskId"));
-	$('#edit-task-prompt').modal();
-	
-	var textArea = $('#edit-task-prompt-text');
-	textArea.val(taskList[id].description);
-	textArea.attr('taskId', id);
-	$('#task-save-button').attr('onclick', 'onSaveTaskClick()');
+    $('#edit-task-prompt').modal();
+
+    var textArea = $('#edit-task-prompt-text');
+    textArea.val(taskList[id].description);
+    textArea.attr('taskId', id);
+    $('#task-save-button').attr('onclick', 'onSaveTaskClick()');
 }
 
 function onSaveTaskClick() {
-	var description = $("#edit-task-prompt-text").val();
-	if (description.trim().length > 0) {
-		$("#edit-task-prompt").modal("hide");
-		editTask($('#edit-task-prompt-text').attr('taskId'), description);
-	}
+    var textArea = $("#edit-task-prompt-text");
+    var description = textArea.val();
+    if (description.trim().length > 0) {
+        $("#edit-task-prompt").modal("hide");
+        editTask(textArea.attr('taskId'), description);
+    }
 }
 
 function onRemoveTaskClick(element) {
@@ -134,8 +139,8 @@ function onCompletedCheckboxClick(element) {
 }
 
 function onTaskDescriptionClick(description) {
-	$('#alert_text').text(description);
-	$('#alert').modal();
+    $('#alert_text').text(description);
+    $('#alert').modal();
 }
 //
 
@@ -156,6 +161,7 @@ function editTask(id, newDescription) {
         listContainerHandler.updateTask(id);
     }
 }
+
 function setTaskCompleted(taskId, completed) {
     if (taskList[taskId].completed !== completed) {
         taskList[taskId].completed = completed;
