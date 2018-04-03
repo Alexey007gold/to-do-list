@@ -74,11 +74,13 @@ function initListContainerHandler() {
 //Listeners
 document.onkeypress = function(e) {
     if (e.keyCode === 13) {
-		if ($('#edit-task-prompt').hasClass('show')) {
-			onSaveTaskClick();
-		} else {
-			onAddTaskClick();
-		}
+	if ($('#edit-task-prompt').hasClass('show')) {
+	    onSaveTaskClick();
+	} else if($('#alert').hasClass('show')) {
+            $("#alert").modal("hide");
+	} else {
+	    onAddTaskClick();
+	}
     }
 };
 
