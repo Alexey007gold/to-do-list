@@ -146,7 +146,7 @@ function onTaskDescriptionClick(description) {
 
 //server requests implementation
 function addNewTask(newTask) {
-    request("POST", "/addTask", JSON.stringify(newTask));
+    request("POST", "addTask", JSON.stringify(newTask));
 
     listContainerHandler.addTask(taskList.length, newTask);
     taskList.push(newTask);
@@ -156,7 +156,7 @@ function editTask(id, newDescription) {
     if (id > -1 && id < taskList.length) {
         taskList[id].description = newDescription;
 
-        request("POST", "/editTask", "{\"id\":" + id + ", \"task\":" + JSON.stringify(taskList[id]) + "}");
+        request("POST", "editTask", "{\"id\":" + id + ", \"task\":" + JSON.stringify(taskList[id]) + "}");
 
         listContainerHandler.updateTask(id);
     }
@@ -166,13 +166,13 @@ function setTaskCompleted(taskId, completed) {
     if (taskList[taskId].completed !== completed) {
         taskList[taskId].completed = completed;
 
-        request("POST", "/editTask", "{\"id\":" + taskId + ", \"task\":" + JSON.stringify(taskList[taskId]) + "}");
+        request("POST", "editTask", "{\"id\":" + taskId + ", \"task\":" + JSON.stringify(taskList[taskId]) + "}");
     }
 }
 
 function removeTask(id) {
     if (id > -1 && id < taskList.length) {
-        request("DELETE", "/deleteTask?id=" + id);
+        request("DELETE", "deleteTask?id=" + id);
 
         taskList.splice(id, 1);
         listContainerHandler.removeTask(id);
@@ -180,7 +180,7 @@ function removeTask(id) {
 }
 
 function loadTaskList() {
-    request("GET", "/getAllTasks", null, function (request) {
+    request("GET", "getAllTasks", null, function (request) {
         taskList = JSON.parse(request.responseText);
         listContainerHandler.repopulate(taskList);
     });
