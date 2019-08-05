@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class TaskService {
 
-    private static final File STORAGE_FILE = new File("src/main/resources/tasks.json");
+    private File STORAGE_FILE = new File("src/main/resources/tasks.json");
     private List<Task> tasks;
 
     private ObjectMapper objectMapper;
@@ -27,12 +27,24 @@ public class TaskService {
         objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         if (!STORAGE_FILE.exists()) {
-            if (!STORAGE_FILE.createNewFile()) {
-                throw new IllegalStateException("Could not create file for storage");
+            try {
+                if (!createFile(STORAGE_FILE)) {
+                    throw new IllegalStateException("Could not create file for storage");
+                }
+            } catch (Exception e) {
+                STORAGE_FILE = File.createTempFile("", "");
+            } finally {
+                Files.write(STORAGE_FILE.toPath(), "[]".getBytes());
             }
-            Files.write(STORAGE_FILE.toPath(), "[]".getBytes());
         }
-        tasks = objectMapper.readValue(STORAGE_FILE, new TypeReference<List<Task>>(){});
+        System.out.println("Data file is at " + STORAGE_FILE.getAbsolutePath());
+        tasks = objectMapper.readValue(STORAGE_FILE, new TypeReference<List<Task>>() {});
+    }
+
+    private boolean createFile(File file) throws IOException {
+        file.getParentFile().mkdirs();
+        if (file.createNewFile()) return false;
+        return STORAGE_FILE.canWrite();
     }
 
     public List<Task> getAllTasks() {
